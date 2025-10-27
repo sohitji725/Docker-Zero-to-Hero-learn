@@ -14,39 +14,38 @@ func main() {
 	for {
 		// Read input from the user
 		reader := bufio.NewReader(os.Stdin)
-		fmt.Print("Enter any calculation (Example: 1 + 2 (or) 2 * 5 -> Please maintain spaces as shown in example): ")
+		fmt.Print("Enter any calculation (Example: 1 + 2 or 2 * 5) -> Please maintain spaces as shown: ")
 		text, _ := reader.ReadString('\n')
 
 		// Trim the newline character from the input
 		text = strings.TrimSpace(text)
 
-		// Check if the user entered "exit" to quit the program
+		// Exit condition
 		if text == "exit" {
+			fmt.Println("Exiting calculator...")
 			break
 		}
 
-		// Split the input into two parts: the left operand and the right operand
+		// Split input into parts
 		parts := strings.Split(text, " ")
 		if len(parts) != 3 {
 			fmt.Println("Invalid input. Try again.")
 			continue
 		}
 
-		// Convert the operands to integers
-		left, err := strconv.Atoi(parts[0])
-		if err != nil {
-			fmt.Println("Invalid input. Try again.")
-			continue
-		}
-		right, err := strconv.Atoi(parts[2])
-		if err != nil {
-			fmt.Println("Invalid input. Try again.")
+		// Convert operands to integers
+		left, err1 := strconv.Atoi(parts[0])
+		right, err2 := strconv.Atoi(parts[2])
+		operator := parts[1]
+
+		if err1 != nil || err2 != nil {
+			fmt.Println("Invalid numbers. Try again.")
 			continue
 		}
 
-		// Perform the calculation based on the operator
+		// Perform the operation
 		var result int
-		switch parts[1] {
+		switch operator {
 		case "+":
 			result = left + right
 		case "-":
@@ -54,9 +53,13 @@ func main() {
 		case "*":
 			result = left * right
 		case "/":
+			if right == 0 {
+				fmt.Println("Cannot divide by zero.")
+				continue
+			}
 			result = left / right
 		default:
-			fmt.Println("Invalid operator. Try again.")
+			fmt.Println("Unsupported operator. Use +, -, *, or /")
 			continue
 		}
 
@@ -64,4 +67,3 @@ func main() {
 		fmt.Printf("Result: %d\n", result)
 	}
 }
-
